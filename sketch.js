@@ -227,19 +227,6 @@ function play() {
   on = true
 }
 
-function playNote(note, duration) {
-  osc.freq(midiToFreq(note));
-  // Fade it in
-  osc.fade(0.5,0.2);
-
-  // If we sest a duration, fade it out
-  if (duration) {
-    setTimeout(function() {
-      osc.fade(0,0.2);
-    }, duration-50);
-  }
-}
-
 function setup() {
   width = 800
   height = 600// width * boundary[3] / boundary[2]
