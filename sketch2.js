@@ -114,7 +114,7 @@ class Turtle {
   }
 
   push() {
-    console.log(`Saved state: ${this.x}, ${this.y}, ${this.angle}`)
+    // console.log(`Saved state: ${this.x}, ${this.y}, ${this.angle}`)
     this.stack.push([this.x, this.y, this.angle])
   }
 
@@ -126,7 +126,7 @@ class Turtle {
     this.y = loaded[1]
     this.angle = loaded[2]
 
-    console.log(`Loaded state: ${this.x}, ${this.y}, ${this.angle}`)
+    // console.log(`Loaded state: ${this.x}, ${this.y}, ${this.angle}`)
   }
 
   position() {
@@ -279,6 +279,7 @@ function processGeneration(generation) {
 
   i = 0
   background(101)
+  drawFull()
 }
 
 function generate() {
@@ -331,6 +332,19 @@ function setup() {
   button = createButton("pause")
   button.mousePressed(pause)
 }
+
+function drawFull() {
+  stroke(0);
+  for (line_ of lines) {
+    let p1, p2
+    p1 = line_[0]
+    p2 = line_[1]
+    line(xOffset + p1[0] * scaleFactor, yOffset + p1[1] * scaleFactor, xOffset + p2[0] * scaleFactor, yOffset + p2[1] * scaleFactor)
+  }
+  
+  stroke(255, 204, 0);
+}
+
 
 function draw() {
   /* This function is native to p5.js, it will be called on every frame, what we are doing here is to paint a
@@ -408,11 +422,6 @@ function createPreloadedRulesButtons() {
   var startingY = 20;
   // Here begins the menu for chosing an existing axiom, rules
   for (let j = 0; j < tuples.length; j++) {
-      if (selectedTupleIndex === j) {
-        fill(25, 230, 0) // Highlight selected option in red
-      } else {
-        fill(0)
-      }
       textSize(16)
       textAlign(LEFT, CENTER)
       buttons[tuples[j].name] = createButton(tuples[j].name).mouseClicked(function () {
