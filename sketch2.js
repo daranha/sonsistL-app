@@ -1,14 +1,60 @@
-let axiom = "L";
+let axiom = "L"
+let buttons = {}
 let tuples = [
-  ["Copo de Koch", "F--F--F", {"F":"F+F--F+F"}, 60],
-  ["Curva de Hilbert", "L", {"L":"+RF-LFL-FR+", "R":"-LF+RFR+FL-"}, 90],
-  ["Curva de Gosper", "FX", {"X":"X+YF++YF-FX--FXFX-YF+", "Y": "-FX+YFYF++YF+FX--FX-Y"}, 60],
-  ["Curva del Dragón", "FX+FX+FX", {"X":"X+YF+", "Y":"-FX-Y"}, 90],
-  ["Romero", "F", {"F":"F[+F]F[-F]F"}, 28],
-  ["Ramitas", "F", {"F":"F[-F]F[+F]F"}, 25],
-  ["Arbusto Simétrico", "F", {"F":"F[+F[+F][-F]F][-F[+F][-F]F]F[+F][-F]F"}, 23],
-  ["Curva de Levy", "F", {"F":"+F--F+"}, 45],
-  ["Isla de Koch", "F-F-F-F", {"F": "F-F+F+FF-F-F+F"}, 90]
+  {
+    name: "Copo de Koch",
+    axiom: "F--F--F",
+    rules: { F: "F+F--F+F" },
+    angle: 60,
+  },
+  {
+    name: "Curva de Hilbert",
+    axiom: "L",
+    rules: { L: "+RF-LFL-FR+", R: "-LF+RFR+FL-" },
+    angle: 90,
+  },
+  {
+    name: "Curva de Gosper",
+    axiom: "FX",
+    rules: { X: "X+YF++YF-FX--FXFX-YF+", Y: "-FX+YFYF++YF+FX--FX-Y" },
+    angle: 60,
+  },
+  {
+    name: "Curva del Dragón",
+    axiom: "FX+FX+FX",
+    rules: { X: "X+YF+", Y: "-FX-Y" },
+    angle: 90,
+  },
+  {
+    name: "Romero",
+    axiom: "F",
+    rules: { F: "F[+F]F[-F]F" },
+    angle: 28,
+  },
+  {
+    name: "Ramitas",
+    axiom: "F",
+    rules: { F: "F[-F]F[+F]F" },
+    angle: 25,
+  },
+  {
+    name: "Arbusto Simétrico",
+    axiom: "F",
+    rules: { F: "F[+F[+F][-F]F][-F[+F][-F]F]F[+F][-F]F" },
+    angle: 23,
+  },
+  {
+    name: "Curva de Levy",
+    axiom: "F",
+    rules: { F: "+F--F+" },
+    angle: 45,
+  },
+  {
+    name: "Isla de Koch",
+    axiom: "F-F-F-F",
+    rules: { F: "F-F+F+FF-F-F+F" },
+    angle: 90,
+  },
 ];
 
 let selectedTupleIndex = 0;
@@ -261,7 +307,7 @@ function play() {
 
 function setup() {
   width = 800
-  height = 800// width * boundary[3] / boundary[2]
+  height = 600// width * boundary[3] / boundary[2]
   proportion = .75 // How much of the canvas should the drawing take
   on = true
   createCanvas(width, height)
@@ -313,9 +359,6 @@ function draw() {
     osc.freq(0)
   }
 }
-
-
-
 
 function createInputButtons() {
   var startingX = 600;
@@ -373,19 +416,26 @@ function createPreloadedRulesButtons() {
   // Here begins the menu for chosing an existing axiom, rules
   for (let j = 0; j < tuples.length; j++) {
       if (selectedTupleIndex === j) {
-        fill(25, 230, 0); // Highlight selected option in red
+        fill(25, 230, 0) // Highlight selected option in red
       } else {
-        fill(0);
+        fill(0)
       }
-      textSize(16);
-      textAlign(LEFT, CENTER);
-      createButton(tuples[j][0]).mouseClicked(function () {
-        axiom = tuples[j][1];
-        newRules = tuples[j][2];
-        newAngle = int(tuples[j][3]);
-        generation = axiom;
-
+      textSize(16)
+      textAlign(LEFT, CENTER)
+      buttons[tuples[j].name] = createButton(tuples[j].name).mouseClicked(function () {
+        axiom = tuples[j].axiom
+        newRules = tuples[j].rules
+        newAngle = int(tuples[j].angle)
+        generation = axiom
+        clearButtons()
+        buttons[tuples[j].name].addClass("active")
       }
-    ).position( startingX, startingY + j * 23);
+    ).position( startingX, startingY + j * 23)
     }
+}
+
+function clearButtons() {
+  for (button of Object.values(buttons)) {
+    button.removeClass("active")
+  }
 }
