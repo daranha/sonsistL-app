@@ -25,6 +25,7 @@ let button
 let xOffset
 let yOffset
 let on
+let epsilon =0.001
 
 let newRules = {"L":"+RF-LFL-FR+", "R":"-LF+RFR+FL-"};
 // The midi notes of a scale
@@ -210,9 +211,30 @@ function processGeneration(generation) {
   notes = lSystemToNotes(generation)
   lines = parseGeneration(generation, newAngle)
   boundary = computeBoundingBox(lines)
-  scaleFactor = height * proportion / boundary[3] // We are using the width to proportionate things, we could use the height as well
-  xOffset = boundary[0] * scaleFactor + (width - boundary[2] * scaleFactor) / 2
-  yOffset = -1 * boundary[1] * scaleFactor + (height - boundary[3] * scaleFactor) / 2
+
+  if (width < height) {
+    if (boundary[3] - boundary[2] < epsilon) {
+      scaleFactor = width * proportion / boundary[2]
+    } else {
+      scaleFactor = height * proportion / boundary[3]
+    }
+  } else {
+    if (boundary[2] - boundary[3] < epsilon) {
+      scaleFactor = height * proportion / boundary[3]
+    } else {
+      scaleFactor = width * proportion / boundary[2]
+    }
+  }
+
+  
+  fractalWidth = boundary[2] * scaleFactor
+  fractalHeight = boundary[3] * scaleFactor
+
+  xOrigin = boundary[0] * scaleFactor
+  yOrigin = boundary[1] * scaleFactor
+
+  xOffset = -1 * xOrigin + (width - fractalWidth) / 2
+  yOffset = -1 * yOrigin + (height - fractalHeight) / 2
 
   i = 0
   background(101)
@@ -239,7 +261,7 @@ function play() {
 
 function setup() {
   width = 800
-  height = 600// width * boundary[3] / boundary[2]
+  height = 800// width * boundary[3] / boundary[2]
   proportion = .75 // How much of the canvas should the drawing take
   on = true
   createCanvas(width, height)
@@ -283,9 +305,10 @@ function draw() {
       osc.freq(midiToFreq(note))
       env.ramp(osc, 0, 1.0, 0)
     }
-
+    
     line(xOffset + p1[0] * scaleFactor, yOffset + p1[1] * scaleFactor, xOffset + p2[0] * scaleFactor, yOffset + p2[1] * scaleFactor)
     i++
+
   } else {
     osc.freq(0)
   }
@@ -361,7 +384,6 @@ function createPreloadedRulesButtons() {
         newRules = tuples[j][2];
         newAngle = int(tuples[j][3]);
         generation = axiom;
-        processGeneration(generation)
 
       }
     ).position( startingX, startingY + j * 23);
