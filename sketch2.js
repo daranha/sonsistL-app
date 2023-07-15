@@ -166,23 +166,18 @@ function hasKey(obj, key) {
 function lSystemToNotes(lSystemString) {
   let currentNote = 65
   let notes = []
-  let move = []
   for (symbol of lSystemString.split("")) {
     if (symbol === "F") {
-      notes.push(move)
-      move = []
+      notes.push(currentNote)
     } else if (symbol === "+") {
       currentNote += 2
-      // continue
     } else if (symbol === "-") {
       currentNote -= 2
-      // continue
     } else if (symbol === "[") {
       continue
     } else if (symbol === "]") {
       continue
     }
-    move.push(currentNote)
   }
   return notes
 }
@@ -347,10 +342,8 @@ function draw() {
     p1 = line_[0]
     p2 = line_[1]
 
-    for (note of notes[i]) {
-      osc.freq(midiToFreq(note))
-      env.ramp(osc, 0, 1.0, 0)
-    }
+    osc.freq(midiToFreq(notes[i]))
+    env.ramp(osc, 0, 1.0, 0)    
     
     line(xOffset + p1[0] * scaleFactor, yOffset + p1[1] * scaleFactor, xOffset + p2[0] * scaleFactor, yOffset + p2[1] * scaleFactor)
     i++
