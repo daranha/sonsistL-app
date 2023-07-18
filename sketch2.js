@@ -26,10 +26,10 @@ let tuples = [
     angle: 90,
   },
   {
-    name: "Romero",
-    axiom: "F",
-    rules: { F: "F[+F]F[-F]F" },
-    angle: 28,
+    name: "Copo de Penrose",
+    axiom: "F-F-F-F-F",
+    rules: { F: "F-F++F+F-F-F" },
+    angle: 72,
   },
   {
     name: "Ramitas",
